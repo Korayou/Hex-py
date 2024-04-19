@@ -1,6 +1,7 @@
 import copy
 from math import log, sqrt, inf
 from random import choice
+import pygame
 
 import numpy as np
 from rich.console import Console
@@ -41,6 +42,7 @@ class MCTS:
         root_node = Node(self.logic, self.root_state)
 
         for _ in track(range(itermax), description="MCTS:", total=itermax):
+            pygame.event.poll()
             node = root_node
             state = copy.deepcopy(self.root_state)
             self.turn_state = True
