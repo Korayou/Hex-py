@@ -29,6 +29,7 @@ class Tournament:
         game.get_game_info([self.BOARD_SIZE, self.ITERMAX, self.MODE, self.GAME_COUNT])
         while not game.winner:
             game.play()
+        print("Game over!")
 
     def championship(self):
         # r1 (BLUE) r2 (RED)

@@ -21,7 +21,7 @@ def main(args):
 if __name__ == "__main__":
     BOARD_SIZE = 7
     ITERMAX = 500
-    MODE = "man_vs_cpu"
+    MODE = "cpu_vs_cpu"
     GAME_COUNT, N_GAMES = 0, 200
 
     if MODE == "man_vs_cpu":
