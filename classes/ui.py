@@ -176,6 +176,8 @@ class UI:
         return x, y
 
     def get_true_coordinates(self, node: int):
+        if node is None:
+            node=0
         return int(node / self.board_size), node % self.board_size
 
     def get_node_hover(self):
@@ -218,4 +220,5 @@ class UI:
     def get_normalized_visits(self, visits: list):
         normalized_visits = [node_visits - min(visits) for node_visits in visits]
         # Maximum set to 200 instead of 255 (RGBA)
-        return [int(node_visits / max(normalized_visits) * 200) for node_visits in normalized_visits]
+        max_normalized_visits = max(normalized_visits) if max(normalized_visits) else 0.0001
+        return [int(node_visits / max_normalized_visits) for node_visits in normalized_visits]
