@@ -134,7 +134,7 @@ class Logic:
 
         assert self.is_node_free((x, y), self.logger), "node is busy"
         self.make_move((x, y), player)
-        self.CSVlogger.add_row(self.logger, player, y * self.ui.board_size + x)
+        self.CSVlogger.add_row(self.logger, player, x * self.ui.board_size + y)
         self.logger[x][y] = player
 
         return self.is_game_over(player, self.logger)
