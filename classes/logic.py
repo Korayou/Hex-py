@@ -116,12 +116,11 @@ class Logic:
     def get_action(self, node: Union[int, None], player: int) -> int:
         # Human player
         if player is self.ui.BLUE_PLAYER:
-            self.mcts = MCTS(logic=self, ui=self.ui, board_state=self.logger, starting_player=self.ui.BLUE_PLAYER)
-            x, y = self.mcts.start(itermax=self.itermax, verbose=True, show_predictions=True)
+            # x, y = self.ui.get_true_coordinates(node)
             # Debug: random player
             # x, y = choice(self.get_possible_moves(self.logger))
-            # self.mcts = MCTS(logic=self, ui=self.ui, board_state=self.logger, starting_player=self.ui.BLUE_PLAYER)
-            # x, y = self.mcts.start(itermax=self.itermax, verbose=False)
+            self.mcts = MCTS(logic=self, ui=self.ui, board_state=self.logger, starting_player=self.ui.BLUE_PLAYER)
+            x, y = self.mcts.start(itermax=self.itermax, verbose=False)
 
         # AI player
         if player is self.ui.RED_PLAYER:
