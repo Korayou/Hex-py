@@ -7,23 +7,35 @@ class CSVLogger:
     header: list[str]
 
     def __init__(self, board_size: int):
-        self.dataset = np.zeros(shape=(0, (board_size ** 2) + 3), dtype=np.uint8)
+        self.dataset = np.zeros(shape=(0, (board_size ** 2) * 2 + 2), dtype=np.uint8)
         self.header = []
 
         for i in range(board_size ** 2):
             self.header.append(f"Case_{i}")
 
+        for i in range(board_size ** 2):
+            self.header.append(f"Case_{i}_score")
+
         self.header.append("Joueur")
-        self.header.append("Gagnant")
-        self.header.append("Case_jouee")
+        self.header.append("Victoire")
+        
 
     def add_row(self, board: np.ndarray, player: int, case_jouee: int):
-        self.dataset = np.vstack([self.dataset, np.append(board.flatten(), np.array([player, 0, case_jouee]))])
+        scores: list[int] = [0] * (board.size)
+
+        for i in range(board.size):
+            if case_jouee == i:
+                scores[i] = 1
+        
+        scores.append(player)
+        scores.append(0)
+
+        self.dataset = np.vstack([self.dataset, np.append(board.flatten(), np.array(scores))])
     
     def set_winner(self, player: int):
         for row in self.dataset:
-            if row[-3] == player:
-                row[-2] = 1
+            if row[-2] == player:
+                row[-1] = 1
 
         self.write_file()
 
