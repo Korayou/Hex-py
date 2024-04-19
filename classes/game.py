@@ -7,6 +7,8 @@ from rich.table import Table
 from classes.logic import Logic
 from classes.ui import UI
 
+from classes.CSVLogger import CSVLogger
+
 
 class Game:
     def __init__(self, board_size: int, itermax: int, mode: str, blue_starts: bool = True):
@@ -16,7 +18,8 @@ class Game:
         self.modes[mode] = 1
         # Instantiate classes
         self.ui = UI(board_size)
-        self.logic = Logic(self.ui, itermax)
+        self.CSVlogger = CSVLogger(board_size)
+        self.logic = Logic(self.ui, itermax, self.CSVlogger)
 
         # Initialize variables
         self.node = None
@@ -89,6 +92,7 @@ class Game:
     def get_winner(self):
         if self.winner:
             print("Player {} wins!".format(self.winner))
+            self.CSVlogger.set_winner(self.winner)
             return True
 
     def play(self):

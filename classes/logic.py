@@ -3,16 +3,18 @@ from typing import Union
 import numpy as np
 
 from classes.mcts import MCTS
+from classes.CSVLogger import CSVLogger
 
 
 class Logic:
-    def __init__(self, ui, itermax):
+    def __init__(self, ui, itermax, CSVlogger: CSVLogger):
         self.ui = ui
         self.itermax = itermax
 
         self.GAME_OVER = False
         self.MCTS_GAME_OVER = False
         self.logger = np.zeros(shape=(self.ui.board_size, self.ui.board_size), dtype=np.int8)
+        self.CSVlogger = CSVlogger
 
     def get_possible_moves(self, board: np.ndarray):
         x, y = np.where(board == 0)
@@ -132,6 +134,7 @@ class Logic:
 
         assert self.is_node_free((x, y), self.logger), "node is busy"
         self.make_move((x, y), player)
+        self.CSVlogger.add_row(self.logger, player)
         self.logger[x][y] = player
 
         return self.is_game_over(player, self.logger)
