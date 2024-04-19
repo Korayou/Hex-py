@@ -35,4 +35,4 @@ class CSVLogger:
 
         current_datetime = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         file_path = os.path.join(folder_path, f"game_{current_datetime}.csv")
-        np.savetxt(file_path, self.dataset, delimiter=",", fmt="%i", header=",".join(self.header), comments="")
+        np.savetxt(file_path, self.dataset, delimiter=";", fmt="%i", header=";".join(self.header), comments="")
