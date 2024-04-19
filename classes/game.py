@@ -92,7 +92,6 @@ class Game:
     def get_winner(self):
         if self.winner:
             print("Player {} wins!".format(self.winner))
-            self.CSVlogger.add_row(self.logic.logger, 3 - self.winner)
             self.CSVlogger.set_winner(self.winner)
             return True
 
