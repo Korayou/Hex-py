@@ -121,9 +121,10 @@ class Logic:
         # Human player
         if player is self.ui.BLUE_PLAYER:
             # x, y = self.ui.get_true_coordinates(node)
-            inputData: np.ndarray = self.logger.flatten() + [player, 1]
+            inputData: np.ndarray = np.append(self.logger.flatten(), [player, 1])
             self.bot.sendData(inputData)
 
+            print(self.logger.flatten())
             possibleMoves: list[int] = [i for i in range(self.ui.board_size ** 2) if self.logger.flatten()[i] == 0]
             AI_move = self.bot.receiveData(possibleMoves=possibleMoves)
 
@@ -132,9 +133,9 @@ class Logic:
 
         # AI player
         if player is self.ui.RED_PLAYER:
-            inputData: np.ndarray = self.logger.flatten() + [player, 1]
-            self.bot.sendData(inputData)
+            inputData: np.ndarray = np.append(self.logger.flatten(), [player, 1])
 
+            print(self.logger.flatten())
             possibleMoves: list[int] = [i for i in range(self.ui.board_size ** 2) if self.logger.flatten()[i] == 0]
             AI_move = self.bot.receiveData(possibleMoves=possibleMoves)
 
