@@ -20,7 +20,7 @@ def main(args):
 
 if __name__ == "__main__":
     BOARD_SIZE = 7
-    ITERMAX = 500
+    ITERMAX = 1000
     MODE = "cpu_vs_cpu"
     GAME_COUNT, N_GAMES = 0, 200
 
