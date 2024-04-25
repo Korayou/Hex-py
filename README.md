@@ -64,3 +64,7 @@ Pour générer notre MLP (MultiLayer Perceptron) nous utilisons le logicel JNNET
 
 
 ## Rapport d'utilisation
+
+Pour appeler le modèle :
+
+subprocess.run(["java", "-jar", AI_ENGINE_PATH, "-m", AI_MLP_PATH, "-i", self.iFile, "-o", self.oFile])
