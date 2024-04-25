@@ -10,7 +10,7 @@ class JNNETConnector:
         self.oFile = oFile
 
     def sendData(self, data: np.ndarray):
-        np.savetxt(self.iFile, data, delimiter=";", fmt="%i")
+        np.savetxt(self.iFile, [data], delimiter=";", fmt="%i")
         with open(self.iFile, 'r') as file:
             print(file.readline())
         print(data)
