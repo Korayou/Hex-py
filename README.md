@@ -54,7 +54,7 @@ Chaque ligne réprésente un coup à jouer et contient l'état actuel du plateau
     - `1` si la case a été choisie par le joueur (une seule par tour)
 
 
-![image](imgs\board_7x7.png)
+![image](imgs/board_7x7.png)
 
 
 ## Création du modèle (MLP)
@@ -67,4 +67,4 @@ Pour générer notre MLP (MultiLayer Perceptron) nous utilisons le logicel JNNET
 
 Pour appeler le modèle :
 
-subprocess.run(["java", "-jar", AI_ENGINE_PATH, "-m", AI_MLP_PATH, "-i", self.iFile, "-o", self.oFile])
+`subprocess.run(["java", "-jar", AI_ENGINE_PATH, "-m", AI_MLP_PATH, "-i", self.iFile, "-o", self.oFile])`
