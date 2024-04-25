@@ -11,12 +11,9 @@ class JNNETConnector:
 
     def sendData(self, data: np.ndarray):
         np.savetxt(self.iFile, [data], delimiter=";", fmt="%i")
-        with open(self.iFile, 'r') as file:
-            print(file.readline())
-        print(data)
 
         print("sending...")
-        sub.run(["java", "-jar", AI_ENGINE_PATH, "-m", AI_MLP_PATH, "-i", self.iFile, "-o", self.oFile])
+        sub.run(["java", "-jar", AI_ENGINE_PATH, "-m", AI_MLP_PATH, "-i", self.iFile, "-o", self.oFile, "-r"])
         print("sent.")
 
     def receiveData(self, next: int = 0, possibleMoves: list[int] = []) -> int:
