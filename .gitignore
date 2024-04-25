@@ -163,3 +163,4 @@ cython_debug/
 games_log/
 MLPerceptron.jar
 input.csv
+output.csv
