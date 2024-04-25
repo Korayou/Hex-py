@@ -19,6 +19,9 @@ Ce qui rend “Hex” intéressant, c'est qu'il est impossible qu'il y ait un ma
 ## Rapport technique
 
 # Processus d'apprentissage
+![image](https://github.com/IeM-P8/Hex-py/blob/main/imgs/board_7x7.png)
+
+
 Le processus processus d’apprentissage avec deux IA vierges qui joue l’une contre l’autre.
 
 Ce processus permettra de générer un très grand nombre de parties très rapidement sans attendre qu’un joueur humain joue. En comparaison avec un apprentissage humain VS IA, la courbe d’apprentissage risque d’être plus faible au début mais permettra de développer des stratégies sans être limité par les biais cognitifs humain. D’un autre côté, elle ne pourra pas utiliser ces biais pour générer des stratégies.
