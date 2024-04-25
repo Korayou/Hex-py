@@ -2,8 +2,8 @@ from typing import Union
 
 import numpy as np
 
-from classes.mcts import MCTS
 from classes.CSVLogger import CSVLogger
+from classes.JNNETConnector import JNNETConnector
 
 
 class Logic:
@@ -15,6 +15,7 @@ class Logic:
         self.MCTS_GAME_OVER = False
         self.logger = np.zeros(shape=(self.ui.board_size, self.ui.board_size), dtype=np.int8)
         self.CSVlogger = CSVlogger
+        self.bot = JNNETConnector()
 
     def get_possible_moves(self, board: np.ndarray):
         x, y = np.where(board == 0)
@@ -116,21 +117,29 @@ class Logic:
         return True if not board[x][y] else False
 
     def get_action(self, node: Union[int, None], player: int) -> int:
+        AI_move: int
         # Human player
         if player is self.ui.BLUE_PLAYER:
             # x, y = self.ui.get_true_coordinates(node)
-            # Debug: random player
-            # x, y = choice(self.get_possible_moves(self.logger))
-            self.mcts = MCTS(logic=self, ui=self.ui, board_state=self.logger, starting_player=self.ui.BLUE_PLAYER)
-            x, y = self.mcts.start(itermax=self.itermax, verbose=False)
+            inputData: np.ndarray = self.logger.flatten() + [player, 1]
+            self.bot.sendData(inputData)
+
+            possibleMoves: list[int] = [i for i in range(self.ui.board_size ** 2) if self.logger.flatten()[i] == 0]
+            AI_move = self.bot.receiveData(possibleMoves=possibleMoves)
+
+            x = AI_move // self.ui.board_size
+            y = AI_move % self.ui.board_size
 
         # AI player
         if player is self.ui.RED_PLAYER:
-            # Debug: random player
-            # x, y = choice(self.get_possible_moves(self.logger))
-            # MCTS player
-            self.mcts = MCTS(logic=self, ui=self.ui, board_state=self.logger, starting_player=self.ui.RED_PLAYER)
-            x, y = self.mcts.start(itermax=self.itermax, verbose=True, show_predictions=True)
+            inputData: np.ndarray = self.logger.flatten() + [player, 1]
+            self.bot.sendData(inputData)
+
+            possibleMoves: list[int] = [i for i in range(self.ui.board_size ** 2) if self.logger.flatten()[i] == 0]
+            AI_move = self.bot.receiveData(possibleMoves=possibleMoves)
+
+            x = AI_move // self.ui.board_size
+            y = AI_move % self.ui.board_size
 
         assert self.is_node_free((x, y), self.logger), "node is busy"
         self.make_move((x, y), player)
