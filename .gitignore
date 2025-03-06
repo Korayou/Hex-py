@@ -164,3 +164,8 @@ games_log/
 MLPerceptron.jar
 input.csv
 output.csv
+
+.jnnet.properties
+default_command.properties
+out/
+

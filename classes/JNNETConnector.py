@@ -19,10 +19,19 @@ class JNNETConnector:
     def receiveData(self, next: int = 0, possibleMoves: list[int] = []) -> int:
         """Public function that returns the best (or `next`th) move from the neural network."""
         data: list[int] = self._receiveRawData()
-        processed: list[int] = self._processRawData(data)
-        filtered: list[int] = [i for i in processed if i in possibleMoves or len(possibleMoves) == 0]
+        #processed: list[int] = self._processRawData(data)
+        print(possibleMoves)
+        #print(processed)
+        filtered: list[float] = []
+        if len(possibleMoves) != 0:
+            filtered = [data[i] for i in possibleMoves]
+        
+        #filtered: list[int] = [i for i in processed if i in possibleMoves or len(possibleMoves) == 0]
+
+        print(filtered.index(max(filtered)))
+
         try:
-            return filtered[next]
+            return data.index(max(filtered))
         except IndexError:
             return -1
 
@@ -32,8 +41,8 @@ class JNNETConnector:
         with open(self.oFile, 'r') as file:
             data = file.readline().split(';')
 
-        print(data)
-        return [int(i) for i in data]
+        #print(data)
+        return [float(i) for i in data]
     
     def _processRawData(self, data: list[int]) -> list[int]:
         """Private function that sorts the list and returns the best moves."""
