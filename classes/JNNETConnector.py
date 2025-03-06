@@ -13,7 +13,7 @@ class JNNETConnector:
         np.savetxt(self.iFile, [data], delimiter=";", fmt="%i")
 
         print("sending...")
-        sub.run(["java", "-jar", AI_ENGINE_PATH, "-m", AI_MLP_PATH, "-i", self.iFile, "-o", self.oFile, "-r"])
+        sub.run(["java", "-jar", AI_ENGINE_PATH, "-r", "-m", AI_MLP_PATH, "-i", self.iFile, "-o", self.oFile])
         print("sent.")
 
     def receiveData(self, next: int = 0, possibleMoves: list[int] = []) -> int:
