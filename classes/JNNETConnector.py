@@ -28,7 +28,7 @@ class JNNETConnector:
         
         #filtered: list[int] = [i for i in processed if i in possibleMoves or len(possibleMoves) == 0]
 
-        print(filtered.index(max(filtered)))
+        print(data.index(max(filtered)))
 
         try:
             return data.index(max(filtered))
