@@ -21,14 +21,12 @@ def main(args):
 if __name__ == "__main__":
     BOARD_SIZE = 7
     ITERMAX = 1000
-    MODE = "cpu_vs_cpu"
+    MODE = "man_vs_cpu"
     GAME_COUNT, N_GAMES = 0, 200
 
     if MODE == "man_vs_cpu":
         log = logging.getLogger("rich")
 
-        print("What [bold blue]board size[/bold blue] do you want to play on?", end="\t")
-        BOARD_SIZE = int(input())
         print("How many iterations should MCTS play ([bold red]itermax[/bold red])?", end="\t")
         ITERMAX = int(input())
 

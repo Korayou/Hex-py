@@ -13,9 +13,7 @@ from classes.CSVLogger import CSVLogger
 class Game:
     def __init__(self, board_size: int, itermax: int, mode: str, blue_starts: bool = True):
         # Select mode
-        self.modes = {"cpu_vs_cpu": 0,
-                      "man_vs_cpu": 0}
-        self.modes[mode] = 1
+        self.modes = {"cpu_vs_cpu": 0, "man_vs_cpu": 0, mode: 1}
         # Instantiate classes
         self.ui = UI(board_size)
         self.CSVlogger = CSVLogger(board_size)

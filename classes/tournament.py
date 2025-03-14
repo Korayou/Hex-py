@@ -30,6 +30,7 @@ class Tournament:
         while not game.winner:
             game.play()
         print("Game over!")
+        return game.winner
 
     def championship(self):
         # r1 (BLUE) r2 (RED)
@@ -38,15 +39,13 @@ class Tournament:
         blue_mu, red_mu = [], []
         blue_sigma, red_sigma = [], []
 
-        for _ in range(self.N_GAMES):
-            self.GAME_COUNT = _
+        for i in range(self.N_GAMES):
+            self.GAME_COUNT = i
 
             # First half of the tournament played by one player
             # Remaining half played by other player (see "no pie rule")
-            if self.GAME_COUNT < self.N_GAMES / 2:
-                blue_starts = True
-            if self.GAME_COUNT >= self.N_GAMES / 2:
-                blue_starts = False
+            blue_starts = self.GAME_COUNT < self.N_GAMES / 2
+            
             winner = self.single_game(blue_starts=blue_starts)
 
             if winner is 1:
