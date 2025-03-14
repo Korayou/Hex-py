@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,7 @@ public class GameManager : MonoBehaviour
 
 
     private readonly IPLayer _player1 = new HumanPlayer();
-    private readonly IPLayer _player2 = new HumanPlayer();
+    private readonly IPLayer _player2 = new IAManager();
 
     private IPLayer _currentPlayer;
 
@@ -44,6 +45,7 @@ public class GameManager : MonoBehaviour
 
     private async Awaitable GameLoop()
     {
+        GameLogger log = new GameLogger(new DateTimeOffset(DateTime.UtcNow).ToString());
         while (true)
         {
             await Awaitable.BackgroundThreadAsync();
@@ -58,8 +60,9 @@ public class GameManager : MonoBehaviour
                 return;
             }
 
-            _hexagons[input.Item1, input.Item2].Type =
-                _currentPlayer == _player1 ? Team.Red : Team.Blue;
+            _hexagons[input.Item1, input.Item2].Type = _currentPlayer.Team;
+
+            log.LogTurn(_hexagons, (int)_currentPlayer.Team, input);
 
             await Awaitable.MainThreadAsync();
             Display();
@@ -67,6 +70,8 @@ public class GameManager : MonoBehaviour
                 break;
         }
         
+        log.GameEnd((int)_currentPlayer.Team);
+
         Debug.Log($"{_currentPlayer.Team} has won the game");
     }
 
