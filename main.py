@@ -27,9 +27,6 @@ if __name__ == "__main__":
     if MODE == "man_vs_cpu":
         log = logging.getLogger("rich")
 
-        print("How many iterations should MCTS play ([bold red]itermax[/bold red])?", end="\t")
-        ITERMAX = int(input())
-
         print()
         log.info("You will be playing as the BLUE player!")
         log.warning("No Pie Rule not implemented yet!")
