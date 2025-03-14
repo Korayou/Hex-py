@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
 
     private async Awaitable GameLoop()
     {
-        GameLogger log = new GameLogger(new DateTimeOffset(DateTime.UtcNow).ToString());
+        GameLogger log = new GameLogger(DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".csv");
         while (true)
         {
             await Awaitable.BackgroundThreadAsync();
