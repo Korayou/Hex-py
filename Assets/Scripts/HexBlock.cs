@@ -3,12 +3,12 @@
 public class HexBlock
 {
     public Button Button { get; set; }
-    public HexBlockType Type { get; set; }
+    public Team Type { get; set; }
 }
 
-public enum HexBlockType
+public enum Team
 {
-    Empty = 0,
+    None = 0,
     Red = 1,
     Blue = -1
 }

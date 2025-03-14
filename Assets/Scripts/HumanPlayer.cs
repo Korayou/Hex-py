@@ -2,6 +2,8 @@
 
 public class HumanPlayer : IPLayer
 {
+    public Team Team { get; set; }
+    
     private TaskCompletionSource<(int,int)> _currentPlayerTcs;
     
     
@@ -11,6 +13,7 @@ public class HumanPlayer : IPLayer
         task.Wait();
         return task.Result;
     }
+
 
     private Task<(int, int)> WaitForInput()
     {

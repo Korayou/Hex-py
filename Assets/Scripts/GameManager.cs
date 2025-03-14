@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        _player1.Team = Team.Red;
+        _player2.Team = Team.Blue;
+        
         for (var i = -3; i < 4; i++)
         for (var j = -3; j < 4; j++)
         {
@@ -28,7 +31,7 @@ public class GameManager : MonoBehaviour
             var (x, y) = (i + 3, j + 3);
             _hexagons[x, y] = new HexBlock
             {
-                Type = HexBlockType.Empty,
+                Type = Team.None,
                 Button = hexagon
             };
 
@@ -49,19 +52,20 @@ public class GameManager : MonoBehaviour
 
             var input = _currentPlayer!.GetInput(_hexagons);
 
-            if (_hexagons[input.Item1, input.Item2].Type != HexBlockType.Empty)
+            if (_hexagons[input.Item1, input.Item2].Type != Team.None)
             {
                 Debug.LogError("Invalid move restart the game");
                 return;
             }
 
             _hexagons[input.Item1, input.Item2].Type =
-                _currentPlayer == _player1 ? HexBlockType.Red : HexBlockType.Blue;
+                _currentPlayer == _player1 ? Team.Red : Team.Blue;
 
             await Awaitable.MainThreadAsync();
             Display();
         }
     }
+    
 
     private void Display()
     {
@@ -69,15 +73,14 @@ public class GameManager : MonoBehaviour
         for (var j = 0; j < 7; j++)
         {
             var hexagon = _hexagons[i, j];
-            hexagon.Button.interactable = hexagon.Type is HexBlockType.Empty;
+            hexagon.Button.interactable = hexagon.Type is Team.None;
             hexagon.Button.GetComponent<Image>().color = hexagon.Type switch
             {
-                HexBlockType.Empty => Color.white,
-                HexBlockType.Red => Color.red,
-                HexBlockType.Blue => Color.blue,
+                Team.None => Color.white,
+                Team.Red => Color.red,
+                Team.Blue => Color.blue,
                 _ => Color.white
             };
-            
         }
     }
 
