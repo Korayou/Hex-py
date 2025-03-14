@@ -1,6 +1,6 @@
-﻿namespace DefaultNamespace;
+﻿using UnityEngine;
 
-public class GameManager : UnityEngine.MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     
 }
