@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -9,13 +7,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float hexagonRadius;
 
     private readonly HexBlock[,] _hexagons = new HexBlock[7, 7];
+
+
+    private readonly IPLayer _player1 = new HumanPlayer();
+    private readonly IPLayer _player2 = new HumanPlayer();
     
+     private IPLayer _currentPlayer;
     
-    private IPLayer _player1;
-    private IPLayer _player2;
-    
-    
-    private bool _isWaitingForPlayer = true;
 
     private void Start()
     {
@@ -33,30 +31,60 @@ public class GameManager : MonoBehaviour
                 Type = HexBlockType.Empty,
                 Button = hexagon
             };
-            
+
             hexagon.onClick.AddListener(() => OnHexagonClick(x, y));
         }
 
-        StartCoroutine(nameof(GameLoop));
+        _ = GameLoop();
     }
 
-    
-    
-    private IEnumerator GameLoop()
+
+    private async Awaitable GameLoop()
     {
-        IPLayer currentPlayer = null;
         while (true)
         {
-            currentPlayer = currentPlayer == _player1 ? _player2 : _player1;
+            await Awaitable.BackgroundThreadAsync();
+
+            _currentPlayer = _currentPlayer == _player1 ? _player2 : _player1;
+
+            var input = _currentPlayer!.GetInput(_hexagons);
+
+            if (_hexagons[input.Item1, input.Item2].Type != HexBlockType.Empty)
+            {
+                Debug.LogError("Invalid move restart the game");
+                return;
+            }
+
+            _hexagons[input.Item1, input.Item2].Type =
+                _currentPlayer == _player1 ? HexBlockType.Red : HexBlockType.Blue;
+
+            await Awaitable.MainThreadAsync();
+            Display();
+        }
+    }
+
+    private void Display()
+    {
+        for (var i = 0; i < 7; i++)
+        for (var j = 0; j < 7; j++)
+        {
+            var hexagon = _hexagons[i, j];
+            hexagon.Button.interactable = hexagon.Type is HexBlockType.Empty;
+            hexagon.Button.GetComponent<Image>().color = hexagon.Type switch
+            {
+                HexBlockType.Empty => Color.white,
+                HexBlockType.Red => Color.red,
+                HexBlockType.Blue => Color.blue,
+                _ => Color.white
+            };
             
-            var input = currentPlayer.GetInput();
         }
     }
 
 
     private void OnHexagonClick(int x, int y)
     {
-        Debug.Log($"Hexagon ({x}, {y}) clicked");
-        
+        if(_currentPlayer is HumanPlayer humanPlayer)
+            humanPlayer.SetInput(x, y);
     }
 }

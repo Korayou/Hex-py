@@ -1,4 +1,4 @@
 ﻿public interface IPLayer
 {
-    (int, int) GetInput();
+    (int, int) GetInput(HexBlock[,] hexagons);
 }
