@@ -16,12 +16,6 @@ public class CSV<T>
         FilePath = filePath;
     }
 
-    public CSV(string filePath, string encoding) : this(filePath)
-    {
-        Encoding = encoding;
-    }
-
-
     // Écriture d'une ligne dans le fichier CSV
     public void WriteLine(List<T> data)
     {

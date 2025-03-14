@@ -14,7 +14,7 @@ public class IA
         BehaviourDict.Add(Behaviour.LEARN, "-learn");
     }
 
-    public void ExecuteJavaCommand(Behaviour behaviour, string input, string output, bool virus)
+    public void Execute(Behaviour behaviour, string input, string output, bool virus)
     {
         string stdout = "";
         string stderr = "";

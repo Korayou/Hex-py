@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class IAManager
 {
@@ -23,18 +25,45 @@ public class IAManager
         LearnOutputPath = learnoutputpath;
     }
 
-    public int Run(/*HexBlock list, int player*/)
+    public int Run(HexBlock[,] list, int player)
     {
-        int[] values = new int[51];
-        // values[49] = player;
-        // values[50] = 1;
+        List<int> values = ConvertTableau(list, player);
 
-        return 0;
+        CSV<int> inputFile = new CSV<int>(InputPath);
+        inputFile.WriteLine(values);
+
+        iaBack.Execute(IA.Behaviour.RUN, InputPath, OutputPath, false);
+
+        CSV<float> outputFile = new CSV<float>(OutputPath);
+        List<float> output = outputFile.ReadLine(0);
+
+        return output.IndexOf(output.Max());
     }
 
-    public void Learn()
+    public void Learn(string gamename)
     {
+        string gamePath = GameLogPath + "/" + gamename;
 
+
+
+    }
+
+    private List<int> ConvertTableau(HexBlock[,] list, int player)
+    {
+        List<int> values = new List<int>();
+
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                values.Add((int)list[i, j].Type);
+            }
+        }
+
+        values.Add(player);
+        values.Add(1); // parce-que
+
+        return values;
     }
 
 }
