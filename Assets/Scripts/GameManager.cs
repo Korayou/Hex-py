@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
 
     private IPLayer _currentPlayer;
 
-
     private void Start()
     {
         _player1.Team = Team.Red;
