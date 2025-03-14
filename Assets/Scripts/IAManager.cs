@@ -43,6 +43,7 @@ public class IAManager : IPLayer
         iaBack.Execute(IA.Behaviour.RUN, InputPath, OutputPath, false);
 
         CSV<float> outputFile = new CSV<float>(OutputPath);
+        outputFile.Separator = ";";
         List<float> output = outputFile.ReadLine(0);
 
         return output.IndexOf(output.Max());

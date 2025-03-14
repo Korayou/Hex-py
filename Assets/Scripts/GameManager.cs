@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
 
     private readonly IPLayer _player1 = new HumanPlayer();
-    private readonly IPLayer _player2 = new HumanPlayer();
+    private readonly IPLayer _player2 = new IAManager();
     
      private IPLayer _currentPlayer;
     

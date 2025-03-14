@@ -1,9 +1,8 @@
 using UnityEngine;
-
-using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
-using System; // Pour la généricité
+using System;
+using System.Globalization; // Pour la généricité
 
 public class CSV<T>
 {
@@ -14,6 +13,7 @@ public class CSV<T>
     public CSV(string filePath)
     {
         FilePath = filePath;
+        CreateFile();
     }
 
     // Écriture d'une ligne dans le fichier CSV
@@ -56,7 +56,7 @@ public class CSV<T>
                         try
                         {
                             // Conversion du string vers le type T
-                            T convertedValue = (T)Convert.ChangeType(value, typeof(T));
+                            T convertedValue = (T)Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
                             row.Add(convertedValue);
                         }
                         catch (Exception)
