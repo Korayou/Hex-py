@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class IAManager
+public class IAManager : IPLayer
 {
     private string GameLogPath = "gamelogs";
     
@@ -14,6 +14,8 @@ public class IAManager
 
     private IA iaBack = new IA();
 
+    public Team Team { get; set; }
+
     public IAManager() { }
 
     public IAManager(string gamelogpath, string inputpath, string outputpath, string learninputpath, string learnoutputpath)
@@ -23,6 +25,12 @@ public class IAManager
         OutputPath = outputpath;
         LearnInputPath = learninputpath;
         LearnOutputPath = learnoutputpath;
+    }
+
+    public (int, int) GetInput(HexBlock[,] list)
+    {
+        int cell = Run(list, (int)Team);
+        return (cell / 7, cell % 7);
     }
 
     public int Run(HexBlock[,] list, int player)
@@ -54,6 +62,7 @@ public class IAManager
             List<int> output = new List<int>();
             List<int> input = new List<int>();
 
+            int player = row[49];
             int victor = row[50];
             bool won = victor == 1;
 
@@ -75,6 +84,9 @@ public class IAManager
                     else output.Add(-1);
                 }
             }
+
+            input.Add(player);
+            input.Add(1);
 
             CSV<int> learnInput = new CSV<int>(LearnInputPath);
             learnInput.WriteLine(input);

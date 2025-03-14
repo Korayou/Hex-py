@@ -23,7 +23,7 @@ public class IA
 
         Process process = new Process();
         process.StartInfo.FileName = "java"; // Chemin vers java.exe ou le binaire Java
-        process.StartInfo.Arguments = $"-jar  \"{strBehaviour}\"-m model.mlp -i {input} -o {output}"; // Arguments pour la JVM
+        process.StartInfo.Arguments = $"-jar MLPerceptron.jar \"{strBehaviour}\" -m model.mlp -i {input} -o {output}"; // Arguments pour la JVM
 
         process.StartInfo.UseShellExecute = false; // Important pour rediriger la sortie
         process.StartInfo.RedirectStandardOutput = true; // Rediriger la sortie standard
