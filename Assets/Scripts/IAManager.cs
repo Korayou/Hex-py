@@ -44,8 +44,46 @@ public class IAManager
     {
         string gamePath = GameLogPath + "/" + gamename;
 
+        CSV<int> game = new CSV<int>(gamePath);
+        List<List<int>> gameLogs = game.ReadAllLines();
 
+        for (int line = 0; line < gameLogs.Count; line++)
+        {
+            List<int> row = gameLogs[line];
 
+            List<int> output = new List<int>();
+            List<int> input = new List<int>();
+
+            int victor = row[50];
+            bool won = victor == 1;
+
+            for(int i = 0; i < 49; i++)
+            {
+                input.Add(row[i]);
+            }
+
+            for (int i = 51; i < row.Count; i++)
+            {
+                if (row[i] == 0)
+                {
+                    if(won) output.Add(0);
+                    else output.Add(1);
+                }
+                else
+                {
+                    if (won) output.Add(1);
+                    else output.Add(-1);
+                }
+            }
+
+            CSV<int> learnInput = new CSV<int>(LearnInputPath);
+            learnInput.WriteLine(input);
+
+            CSV<int> learnOutput = new CSV<int>(LearnOutputPath);
+            learnOutput.WriteLine(output);
+
+            iaBack.Execute(IA.Behaviour.LEARN, LearnInputPath, LearnOutputPath, false);
+        }
     }
 
     private List<int> ConvertTableau(HexBlock[,] list, int player)
