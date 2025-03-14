@@ -38,6 +38,8 @@ public class IAManager : IPLayer
         List<int> values = ConvertTableau(list, player);
 
         CSV<int> inputFile = new CSV<int>(InputPath);
+        inputFile.DeleteFile();
+        inputFile.CreateFile();
         inputFile.WriteLine(values);
 
         iaBack.Execute(IA.Behaviour.RUN, InputPath, OutputPath, false);
@@ -46,7 +48,13 @@ public class IAManager : IPLayer
         outputFile.Separator = ";";
         List<float> output = outputFile.ReadLine(0);
 
-        return output.IndexOf(output.Max());
+        List<float> filtered = new List<float>();
+        for(int i = 0; i < values.Count; i++)
+        {
+            if (values[i] == 0) filtered.Add(output[i]);
+        }
+
+        return output.IndexOf(filtered.Max());
     }
 
     public void Learn(string gamename)

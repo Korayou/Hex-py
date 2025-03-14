@@ -108,6 +108,14 @@ public class CSV<T>
         {
             try
             {
+                string directoryPath = Path.GetDirectoryName(FilePath);
+
+                // Créez le dossier s'il n'existe pas
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
                 File.Create(FilePath).Close();
             }
             catch (Exception e)
