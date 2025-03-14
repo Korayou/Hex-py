@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -11,15 +15,15 @@ public class GameManager : MonoBehaviour
 
     private readonly IPLayer _player1 = new HumanPlayer();
     private readonly IPLayer _player2 = new HumanPlayer();
-    
-     private IPLayer _currentPlayer;
-    
+
+    private IPLayer _currentPlayer;
+
 
     private void Start()
     {
         _player1.Team = Team.Red;
         _player2.Team = Team.Blue;
-        
+
         for (var i = -3; i < 4; i++)
         for (var j = -3; j < 4; j++)
         {
@@ -63,9 +67,90 @@ public class GameManager : MonoBehaviour
 
             await Awaitable.MainThreadAsync();
             Display();
+            if (HasWon())
+                break;
         }
+        
+        Debug.Log($"{_currentPlayer.Team} has won the game");
     }
-    
+
+    private bool HasWon()
+    {
+        var team = _currentPlayer.Team;
+
+        var visited = new List<(int, int)>();
+        var queue = new Queue<(int, int)>();
+        
+        var teamVector = team == Team.Red ? new Vector2Int(0, 1) : new Vector2Int(1, 0);
+        
+        
+        for (var i = 0; i < 7; i++)
+        {
+            if (_hexagons[teamVector.x * i, teamVector.y * i].Type == team) 
+                queue.Enqueue((teamVector.x * i, teamVector.y * i));
+        }
+        
+        while (queue.Count > 0)
+        {
+            var (x, y) = queue.Dequeue();
+
+            if (team == Team.Red && x == 6)
+                return true;
+            
+            if (team == Team.Blue && y == 6)
+                return true;
+
+            visited.Add((x, y));
+
+            foreach (var neighbor in GetNeighbors(x, y))
+            {
+                if (visited.Contains((neighbor.Item1, neighbor.Item2)))
+                    continue;
+
+                queue.Enqueue((neighbor.Item1, neighbor.Item2));
+            }
+        }
+        
+        return false;
+    }
+
+
+    /// <summary>
+    /// Get all the neighbors of a hexagon that have the same team
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    private List<(int,int)> GetNeighbors(int x, int y)
+    {
+        var neighborsDirections = new[]
+        {
+            (1, 0),
+            (-1, 0),
+            (0, 1),
+            (0, -1),
+            (-1, -1),
+            (1, 1)
+        };
+
+        var neighbors = new List<(int,int)>();
+        var team = _hexagons[x, y].Type;
+
+        foreach (var neighbor in neighborsDirections)
+        {
+            var (nx, ny) = (x + neighbor.Item1, y + neighbor.Item2);
+            if (nx < 0 || nx >= 7 || ny < 0 || ny >= 7)
+                continue;
+
+            if (team != _hexagons[nx, ny].Type)
+                continue;
+
+            neighbors.Add((nx, ny));
+        }
+
+        return neighbors;
+    }
+
 
     private void Display()
     {
@@ -87,7 +172,7 @@ public class GameManager : MonoBehaviour
 
     private void OnHexagonClick(int x, int y)
     {
-        if(_currentPlayer is HumanPlayer humanPlayer)
+        if (_currentPlayer is HumanPlayer humanPlayer)
             humanPlayer.SetInput(x, y);
     }
 }
