@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(nameof(GameLoop));
     }
-
     
     
     private IEnumerator GameLoop()
@@ -49,7 +48,8 @@ public class GameManager : MonoBehaviour
         {
             currentPlayer = currentPlayer == _player1 ? _player2 : _player1;
             
-            var input = currentPlayer.GetInput();
+            var input = currentPlayer.GetInput(_hexagons);
+            
         }
     }
 
