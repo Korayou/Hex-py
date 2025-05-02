@@ -79,4 +79,9 @@ crashlytics-build.properties
 .vsconfig
 MLPerceptron.jar
 lib/
+
 J/
+
+**/*.csv
+
+

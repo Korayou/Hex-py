@@ -7,12 +7,22 @@ using System.Globalization; // Pour la généricité
 public class CSV<T>
 {
     public string FilePath { get; private set; }
+    public string DirectoryName = "";
     public string Separator { get; set; } = ",";
     public string Encoding { get; set; } = "UTF-8";
+    public bool EndLineWithSeparator = false;
 
     public CSV(string filePath)
     {
         FilePath = filePath;
+        CreateFile();
+    }
+
+    public CSV(string filePath, string separator, bool endLineWithSeparator = false)
+    {
+        FilePath = filePath;
+        Separator = separator;
+        EndLineWithSeparator = endLineWithSeparator;
         CreateFile();
     }
 
@@ -28,7 +38,10 @@ public class CSV<T>
                 {
                     stringData.Add(item.ToString()); // Conversion en chaîne
                 }
-                writer.WriteLine(string.Join(Separator, stringData));
+                string line = string.Join(Separator, stringData);
+                if (EndLineWithSeparator)
+                    line += Separator;
+                writer.WriteLine(line);
             }
         }
         catch (Exception e)
@@ -108,12 +121,10 @@ public class CSV<T>
         {
             try
             {
-                string directoryPath = Path.GetDirectoryName(FilePath);
-
                 // Créez le dossier s'il n'existe pas
-                if (!Directory.Exists(directoryPath))
+                if (DirectoryName!="" && !Directory.Exists(DirectoryName))
                 {
-                    Directory.CreateDirectory(directoryPath);
+                    Directory.CreateDirectory(DirectoryName);
                 }
 
                 File.Create(FilePath).Close();
@@ -121,6 +132,7 @@ public class CSV<T>
             catch (Exception e)
             {
                 Debug.LogError("Erreur lors de la création du fichier CSV : " + e.Message);
+                Debug.LogError(FilePath);
             }
         }
     }

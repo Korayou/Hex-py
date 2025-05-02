@@ -23,7 +23,7 @@ public class IA
 
         Process process = new Process();
         process.StartInfo.FileName = "java"; // Chemin vers java.exe ou le binaire Java
-        process.StartInfo.Arguments = $"-jar MLPerceptron.jar \"{strBehaviour}\" -m model.mlp -i {input} -o {output}"; // Arguments pour la JVM
+        process.StartInfo.Arguments = $"-jar MLPerceptron.jar {strBehaviour} -m model.mlp -i {input} -o {output}"; // Arguments pour la JVM
 
         process.StartInfo.UseShellExecute = false; // Important pour rediriger la sortie
         process.StartInfo.RedirectStandardOutput = true; // Rediriger la sortie standard
@@ -36,6 +36,9 @@ public class IA
             stdout = process.StandardOutput.ReadToEnd();
             stderr = process.StandardError.ReadToEnd();
             process.WaitForExit(); // Attendre la fin du processus
+            Debug.Log(stdout);
+            //if (behaviour == Behaviour.LEARN)
+            //    Debug.Log(stdout);
         }
         catch (Exception e)
         {
