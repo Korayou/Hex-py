@@ -37,24 +37,30 @@ public class IAManager : IPLayer
     {
         List<int> values = ConvertTableau(list, player);
 
-        CSV<int> inputFile = new CSV<int>(InputPath);
+        CSV<int> inputFile = new CSV<int>(InputPath, ";");
         inputFile.DeleteFile();
         inputFile.CreateFile();
         inputFile.WriteLine(values);
 
         iaBack.Execute(IA.Behaviour.RUN, InputPath, OutputPath, false);
 
-        CSV<float> outputFile = new CSV<float>(OutputPath);
-        outputFile.Separator = ";";
+        CSV<float> outputFile = new CSV<float>(OutputPath, ";");
         List<float> output = outputFile.ReadLine(0);
 
-        List<float> filtered = new List<float>();
+        int Max_idx = -1;
+        float Max_val = -1;
         for(int i = 0; i < values.Count; i++)
         {
-            if (values[i] == 0) filtered.Add(output[i]);
+            if (values[i] == 0)
+            {
+                if(output[i] > Max_val)
+                {
+                    Max_val = output[i];
+                    Max_idx = i;
+                }
+            }
         }
-
-        return output.IndexOf(filtered.Max());
+        return Max_idx;
     }
 
     public void Learn(string gamename)
@@ -97,10 +103,10 @@ public class IAManager : IPLayer
             input.Add(player);
             input.Add(1);
 
-            CSV<int> learnInput = new CSV<int>(LearnInputPath);
+            CSV<int> learnInput = new CSV<int>(LearnInputPath, ";");
             learnInput.WriteLine(input);
 
-            CSV<int> learnOutput = new CSV<int>(LearnOutputPath);
+            CSV<int> learnOutput = new CSV<int>(LearnOutputPath, ";");
             learnOutput.WriteLine(output);
 
             iaBack.Execute(IA.Behaviour.LEARN, LearnInputPath, LearnOutputPath, false);

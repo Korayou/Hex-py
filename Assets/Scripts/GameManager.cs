@@ -45,7 +45,8 @@ public class GameManager : MonoBehaviour
 
     private async Awaitable GameLoop()
     {
-        GameLogger log = new GameLogger(DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".csv");
+        string GameName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".csv";
+        GameLogger log = new GameLogger(GameName);
         while (true)
         {
             await Awaitable.BackgroundThreadAsync();
@@ -56,7 +57,7 @@ public class GameManager : MonoBehaviour
 
             if (_hexagons[input.Item1, input.Item2].Type != Team.None)
             {
-                Debug.LogError("Invalid move restart the game");
+                Debug.LogError("Invalid move restart the game " + input.Item1 + " " + input.Item2);
                 return;
             }
 
@@ -70,9 +71,13 @@ public class GameManager : MonoBehaviour
                 break;
         }
         
+        Debug.Log($"{_currentPlayer.Team} has won the game");
+
         log.GameEnd((int)_currentPlayer.Team);
 
-        Debug.Log($"{_currentPlayer.Team} has won the game");
+        (_player2 as IAManager).Learn(GameName);
+
+        Debug.Log("End");
     }
 
     private bool HasWon()

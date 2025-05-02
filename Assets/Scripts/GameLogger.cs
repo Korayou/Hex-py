@@ -10,6 +10,7 @@ public class GameLogger
     public GameLogger(string name)
     {
         log = new CSV<int>(GameLogPath + "/" + name);
+        log.DirectoryName = GameLogPath;
     }
 
     public void LogTurn(HexBlock[,] list, int player, (int,int) move)
