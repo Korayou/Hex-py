@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
             var position = (Vector2.right * j + new Vector2(0.5f, -Mathf.Cos(-Mathf.PI / 6)) * i) * hexagonRadius;
             var hexagon = Instantiate(hexagonPrefab, position, Quaternion.identity, transform)
                 .GetComponentInChildren<Button>();
+            
             hexagon.name = $"Hexagon ({i}, {j})";
 
             var (x, y) = (i + 3, j + 3);
@@ -135,8 +136,8 @@ public class GameManager : MonoBehaviour
             (-1, 0),
             (0, 1),
             (0, -1),
-            (-1, -1),
-            (1, 1)
+            (1, -1),
+            (-1, 1)
         };
 
         var neighbors = new List<(int,int)>();
