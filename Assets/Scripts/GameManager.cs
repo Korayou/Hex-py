@@ -89,9 +89,9 @@ public class GameManager : MonoBehaviour
         
         await Awaitable.MainThreadAsync();
 
-        if (numberOfGames > 0)
+        if (numberOfGamesLeft > 0)
         {
-            numberOfGames--;
+            numberOfGamesLeft--;
             SceneManager.LoadScene(0);
         }
         else
