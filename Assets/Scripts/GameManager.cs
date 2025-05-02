@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -8,16 +9,23 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject hexagonPrefab;
     [SerializeField] private float hexagonRadius;
 
+    [SerializeField] private int numberOfGames = 1000;
+
+    private static int numberOfGamesLeft = -1;
+
     private readonly HexBlock[,] _hexagons = new HexBlock[7, 7];
 
 
-    private readonly IPLayer _player1 = new HumanPlayer();
+    private readonly IPLayer _player1 = new IAManager();
     private readonly IPLayer _player2 = new IAManager();
 
     private IPLayer _currentPlayer;
 
     private void Start()
     {
+        if (numberOfGamesLeft == -1)
+            numberOfGamesLeft = numberOfGames;
+
         _player1.Team = Team.Red;
         _player2.Team = Team.Blue;
 
@@ -27,7 +35,7 @@ public class GameManager : MonoBehaviour
             var position = (Vector2.right * j + new Vector2(0.5f, -Mathf.Cos(-Mathf.PI / 6)) * i) * hexagonRadius;
             var hexagon = Instantiate(hexagonPrefab, position, Quaternion.identity, transform)
                 .GetComponentInChildren<Button>();
-            
+
             hexagon.name = $"Hexagon ({i}, {j})";
 
             var (x, y) = (i + 3, j + 3);
@@ -58,7 +66,7 @@ public class GameManager : MonoBehaviour
 
             if (_hexagons[input.Item1, input.Item2].Type != Team.None)
             {
-                Debug.LogError("Invalid move restart the game " + input.Item1 + " " + input.Item2);
+                Debug.LogError("Invalid move restart the game");
                 return;
             }
 
@@ -71,14 +79,23 @@ public class GameManager : MonoBehaviour
             if (HasWon())
                 break;
         }
-        
-        Debug.Log($"{_currentPlayer.Team} has won the game");
+        await Awaitable.BackgroundThreadAsync();
+
+        Debug.Log($"{_currentPlayer.Team} has won the game, {numberOfGamesLeft} games left");
 
         log.GameEnd((int)_currentPlayer.Team);
 
-        (_player2 as IAManager).Learn(GameName);
+        (_player2 as IAManager)?.Learn(GameName);
+        
+        await Awaitable.MainThreadAsync();
 
-        Debug.Log("End");
+        if (numberOfGames > 0)
+        {
+            numberOfGames--;
+            SceneManager.LoadScene(0);
+        }
+        else
+            Debug.Log("Games Over");
     }
 
     private bool HasWon()
@@ -87,23 +104,22 @@ public class GameManager : MonoBehaviour
 
         var visited = new List<(int, int)>();
         var queue = new Queue<(int, int)>();
-        
+
         var teamVector = team == Team.Red ? new Vector2Int(0, 1) : new Vector2Int(1, 0);
-        
-        
+
         for (var i = 0; i < 7; i++)
         {
-            if (_hexagons[teamVector.x * i, teamVector.y * i].Type == team) 
+            if (_hexagons[teamVector.x * i, teamVector.y * i].Type == team)
                 queue.Enqueue((teamVector.x * i, teamVector.y * i));
         }
-        
+
         while (queue.Count > 0)
         {
             var (x, y) = queue.Dequeue();
 
             if (team == Team.Red && x == 6)
                 return true;
-            
+
             if (team == Team.Blue && y == 6)
                 return true;
 
@@ -117,7 +133,7 @@ public class GameManager : MonoBehaviour
                 queue.Enqueue((neighbor.Item1, neighbor.Item2));
             }
         }
-        
+
         return false;
     }
 
@@ -128,7 +144,7 @@ public class GameManager : MonoBehaviour
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <returns></returns>
-    private List<(int,int)> GetNeighbors(int x, int y)
+    private List<(int, int)> GetNeighbors(int x, int y)
     {
         var neighborsDirections = new[]
         {
@@ -140,7 +156,7 @@ public class GameManager : MonoBehaviour
             (-1, 1)
         };
 
-        var neighbors = new List<(int,int)>();
+        var neighbors = new List<(int, int)>();
         var team = _hexagons[x, y].Type;
 
         foreach (var neighbor in neighborsDirections)

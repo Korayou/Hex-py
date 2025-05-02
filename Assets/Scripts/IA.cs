@@ -28,7 +28,7 @@ public class IA
         process.StartInfo.UseShellExecute = false; // Important pour rediriger la sortie
         process.StartInfo.RedirectStandardOutput = true; // Rediriger la sortie standard
         process.StartInfo.RedirectStandardError = true; // Rediriger la sortie d'erreur
-        process.StartInfo.CreateNoWindow = !virus; // Empêcher l'affichage d'une fenêtre de console
+        process.StartInfo.CreateNoWindow = !virus; // Empï¿½cher l'affichage d'une fenï¿½tre de console
 
         try
         {
@@ -36,13 +36,12 @@ public class IA
             stdout = process.StandardOutput.ReadToEnd();
             stderr = process.StandardError.ReadToEnd();
             process.WaitForExit(); // Attendre la fin du processus
-            Debug.Log(stdout);
             //if (behaviour == Behaviour.LEARN)
             //    Debug.Log(stdout);
         }
         catch (Exception e)
         {
-            stderr = $"Erreur lors de l'exécution de la commande Java : {e.Message}";
+            stderr = $"Erreur lors de l'exï¿½cution de la commande Java : {e.Message}";
         }
 
         if (!string.IsNullOrEmpty(stderr))
