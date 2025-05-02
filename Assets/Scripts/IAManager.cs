@@ -70,6 +70,14 @@ public class IAManager : IPLayer
         CSV<int> game = new CSV<int>(gamePath);
         List<List<int>> gameLogs = game.ReadAllLines();
 
+
+        CSV<int> learnInput = new CSV<int>(LearnInputPath, ";");
+        learnInput.DeleteFile();
+        learnInput.CreateFile();
+        CSV<int> learnOutput = new CSV<int>(LearnOutputPath, ";");
+        learnOutput.DeleteFile();
+        learnOutput.CreateFile();
+
         for (int line = 0; line < gameLogs.Count; line++)
         {
             List<int> row = gameLogs[line];
@@ -103,14 +111,11 @@ public class IAManager : IPLayer
             input.Add(player);
             input.Add(1);
 
-            CSV<int> learnInput = new CSV<int>(LearnInputPath, ";");
+
             learnInput.WriteLine(input);
-
-            CSV<int> learnOutput = new CSV<int>(LearnOutputPath, ";");
             learnOutput.WriteLine(output);
-
-            iaBack.Execute(IA.Behaviour.LEARN, LearnInputPath, LearnOutputPath, false);
         }
+        iaBack.Execute(IA.Behaviour.LEARN, LearnInputPath, LearnOutputPath, false);
     }
 
     private List<int> ConvertTableau(HexBlock[,] list, int player)
