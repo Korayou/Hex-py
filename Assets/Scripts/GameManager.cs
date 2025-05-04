@@ -9,17 +9,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject hexagonPrefab;
     [SerializeField] private float hexagonRadius;
 
-    [SerializeField] private int numberOfGames = 1000;
+    [SerializeField] private int numberOfGames = 15;
 
     private static int numberOfGamesLeft = -1;
 
     private readonly HexBlock[,] _hexagons = new HexBlock[7, 7];
 
 
-    private readonly IPLayer _player1 = new IAManager();
+    private readonly IPLayer _player1 = new HumanPlayer();
     private readonly IPLayer _player2 = new IAManager();
 
     private IPLayer _currentPlayer;
+
+    public bool Learning = false;
 
     private void Start()
     {
@@ -28,6 +30,9 @@ public class GameManager : MonoBehaviour
 
         _player1.Team = Team.Red;
         _player2.Team = Team.Blue;
+
+        //(_player1 as IAManager)?.SetModel("model_0.mlp");
+        (_player2 as IAManager)?.SetModel("model.mlp");
 
         for (var i = -3; i < 4; i++)
         for (var j = -3; j < 4; j++)
@@ -85,7 +90,8 @@ public class GameManager : MonoBehaviour
 
         log.GameEnd((int)_currentPlayer.Team);
 
-        (_player2 as IAManager)?.Learn(GameName);
+        if(Learning)
+            (_player2 as IAManager)?.Learn(GameName);
         
         await Awaitable.MainThreadAsync();
 

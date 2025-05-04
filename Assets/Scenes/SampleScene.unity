@@ -730,6 +730,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexagonPrefab: {fileID: 4822438854213430822, guid: 972dc67dd320a914e9c0b6252a89694d, type: 3}
   hexagonRadius: 1
+  numberOfGames: 1000
+  Learning: 1
 --- !u!114 &1472166834
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,6 +9,8 @@ public class IA
     public enum Behaviour { RUN, LEARN };
     private Dictionary<Behaviour, string> BehaviourDict = new Dictionary<Behaviour, string>();
 
+    public string Model = "model.mlp";
+
     public IA() {
         BehaviourDict.Add(Behaviour.RUN, "-run");
         BehaviourDict.Add(Behaviour.LEARN, "-learn");
@@ -23,7 +25,9 @@ public class IA
 
         Process process = new Process();
         process.StartInfo.FileName = "java"; // Chemin vers java.exe ou le binaire Java
-        process.StartInfo.Arguments = $"-jar MLPerceptron.jar {strBehaviour} -m model.mlp -i {input} -o {output}"; // Arguments pour la JVM
+        process.StartInfo.Arguments = $"-jar MLPerceptron.jar {strBehaviour} -m {Model} -i {input} -o {output}"; // Arguments pour la JVM
+
+        //Debug.Log(process.StartInfo.Arguments);
 
         process.StartInfo.UseShellExecute = false; // Important pour rediriger la sortie
         process.StartInfo.RedirectStandardOutput = true; // Rediriger la sortie standard

@@ -12,6 +12,8 @@ public class IAManager : IPLayer
     private string LearnInputPath = "linput.csv";
     private string LearnOutputPath = "loutput.csv";
 
+    public string IAModel = "model.mlp";
+
     private IA iaBack = new IA();
 
     public Team Team { get; set; }
@@ -25,6 +27,12 @@ public class IAManager : IPLayer
         OutputPath = outputpath;
         LearnInputPath = learninputpath;
         LearnOutputPath = learnoutputpath;
+    }
+
+    public void SetModel(string model)
+    {
+        IAModel = model;
+        iaBack.Model = IAModel;
     }
 
     public (int, int) GetInput(HexBlock[,] list)
