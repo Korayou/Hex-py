@@ -1,0 +1,6 @@
+matplotlib==3.8.4
+numpy==1.26.4
+pandas==2.2.2
+pygame==2.5.2
+rich==13.7.1
+trueskill==0.4.5
